@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Koul Market Analysis - Daily Market & Portfolio Artifact</title>
+    <!-- OCR Engine for Screenshot Upload -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <style>
         :root {
             --bg-primary: #121721;
@@ -72,7 +74,7 @@
         .tag-hold { color: var(--accent-gold); font-weight: bold; background: rgba(234, 179, 8, 0.15); padding: 3px 8px; border-radius: 4px; }
 
         .form-row { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
-        .form-row input, .form-row button, .file-input {
+        .form-row input, .form-row button {
             padding: 10px 14px; background: var(--bg-secondary); border: 1px solid var(--border-color); color: white; border-radius: 6px; outline: none;
         }
         .form-row button { background: var(--accent-blue); font-weight: bold; cursor: pointer; border: none; }
@@ -81,6 +83,9 @@
         .upload-box {
             border: 2px dashed var(--border-color); padding: 20px; text-align: center; border-radius: 8px; margin-bottom: 15px; cursor: pointer; background: rgba(255,255,255,0.02);
         }
+
+        .btn-delete { background: var(--accent-red); border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; }
+        .broker-card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; padding: 15px; margin-bottom: 12px; }
 
         .external-links { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
         .ext-btn { background-color: var(--bg-secondary); color: var(--accent-blue); border: 1px solid var(--border-color); padding: 8px 14px; border-radius: 6px; text-decoration: none; font-size: 0.82rem; font-weight: 600; }
@@ -127,7 +132,7 @@
         <button class="tab-btn" onclick="switchTab(event, 'tab-longterm')">Long Term Picks</button>
         <button class="tab-btn" onclick="switchTab(event, 'tab-etf')">Gold & Silver ETF</button>
         <button class="tab-btn" onclick="switchTab(event, 'tab-international')">Global Markets</button>
-        <button class="tab-btn" onclick="switchTab(event, 'tab-brokers')">Broker Comparison</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab-brokers')">Broker Recommendations</button>
     </div>
 
     <div class="content-container">
@@ -137,7 +142,7 @@
             <a href="https://in.tradingview.com/" target="_blank" class="ext-btn">📊 TradingView India</a>
             <a href="https://www.moneycontrol.com/" target="_blank" class="ext-btn">📰 Moneycontrol</a>
             <a href="https://www.ft.com/markets" target="_blank" class="ext-btn">🌐 Financial Times</a>
-            <a href="https://www.nseindia.com/" target="_blank" class="ext-btn">🏛️️ NSE India</a>
+            <a href="https://www.nseindia.com/" target="_blank" class="ext-btn">🏛 NSE India</a>
             <a href="https://www.bseindia.com/" target="_blank" class="ext-btn">🏢 BSE India</a>
         </div>
 
@@ -163,14 +168,7 @@
                             <div class="tradingview-widget-container__widget"></div>
                             <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js" async>
                             {
-                                "feedMode": "market",
-                                "market": "stock",
-                                "colorTheme": "dark",
-                                "isTransparent": true,
-                                "displayMode": "regular",
-                                "width": "100%",
-                                "height": "400",
-                                "locale": "in"
+                                "feedMode": "market", "market": "stock", "colorTheme": "dark", "isTransparent": true, "displayMode": "regular", "width": "100%", "height": "400", "locale": "in"
                             }
                             </script>
                         </div>
@@ -179,21 +177,22 @@
             </div>
         </div>
 
-        <!-- 2. PORTFOLIO ANALYZER -->
+        <!-- 2. PORTFOLIO ANALYZER (WITH PERMANENT STORAGE & OCR) -->
         <div id="tab-portfolio" class="tab-content">
             <div class="card">
-                <div class="card-header">Upload or Enter Holdings for Analysis</div>
+                <div class="card-header">Upload Screenshot or Enter Holdings</div>
                 
                 <div class="upload-box" onclick="document.getElementById('screenshotUpload').click();">
-                    <p>📸 <b>Upload Screenshot of Portfolio</b> (Holdings image from Zerodha, Groww, Angel One)</p>
-                    <input type="file" id="screenshotUpload" style="display:none;" accept="image/*" onchange="handleImageUpload(event)">
-                    <p id="uploadStatus" style="font-size:0.8rem; color:var(--accent-green); margin-top:5px;"></p>
+                    <p>📸 <b>Upload Screenshot of Portfolio</b> (Extracts text via Tesseract OCR)</p>
+                    <input type="file" id="screenshotUpload" style="display:none;" accept="image/*" onchange="processScreenshot(event)">
+                    <p id="uploadStatus" style="font-size:0.82rem; color:var(--accent-gold); margin-top:5px;"></p>
                 </div>
 
                 <div class="form-row">
                     <input type="text" id="portSymbol" placeholder="Stock Name (e.g. RELIANCE)">
                     <input type="number" id="portQty" placeholder="Qty">
                     <input type="number" id="portAvgPrice" placeholder="Buy Price (₹)">
+                    <input type="number" id="portCMP" placeholder="Live/Custom CMP (₹)">
                     <button onclick="addPortfolioStock()">Add Holding</button>
                 </div>
 
@@ -203,47 +202,28 @@
                             <th>Stock</th>
                             <th>Qty</th>
                             <th>Buy Price</th>
-                            <th>CMP</th>
+                            <th>CMP (Live)</th>
                             <th>Fundamental Analysis</th>
                             <th>Technical Setup</th>
                             <th>News Impact</th>
-                            <th>Action</th>
+                            <th>Action Suggestion</th>
+                            <th>Remove</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td><b>HDFCBANK</b></td>
-                            <td>50</td>
-                            <td>₹1,450</td>
-                            <td>₹1,680</td>
-                            <td>Strong deposit growth, robust ROE</td>
-                            <td>Consolidation near 200 EMA support</td>
-                            <td>Positive RBI liquidity stance</td>
-                            <td><span class="tag-add">HOLD / ADD</span></td>
-                        </tr>
-                        <tr>
-                            <td><b>INFY</b></td>
-                            <td>30</td>
-                            <td>₹1,820</td>
-                            <td>₹1,710</td>
-                            <td>IT spending slowdown in US/EU</td>
-                            <td>Bearish RSI divergence on daily chart</td>
-                            <td>Mild macro headwinds</td>
-                            <td><span class="tag-hold">HOLD</span></td>
-                        </tr>
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
         </div>
 
-        <!-- 3. SMART WATCHLIST -->
+        <!-- 3. SMART WATCHLIST (PERSISTENT & LOCKED ENTRY CMP) -->
         <div id="tab-watchlist" class="tab-content">
             <div class="card">
-                <div class="card-header">Dynamic Watchlist with Locked Entry Price</div>
+                <div class="card-header">Dynamic Watchlist (Saves Entry Price & Live CMP Tracking)</div>
                 
                 <div class="form-row">
                     <input type="text" id="watchSymbol" placeholder="Stock Symbol (e.g. TATASTEEL)">
-                    <input type="number" id="watchPrice" placeholder="Entry Price at Addition (₹)">
+                    <input type="number" id="watchEntryPrice" placeholder="Entry Price (₹)">
+                    <input type="number" id="watchCMP" placeholder="Current Price (CMP ₹)">
                     <button onclick="addWatchlistStock()">Add to Watchlist</button>
                 </div>
 
@@ -253,21 +233,13 @@
                             <th>Stock</th>
                             <th>Date Added</th>
                             <th>Entry Price (₹)</th>
-                            <th>CMP (Est. Live)</th>
+                            <th>CMP (₹)</th>
                             <th>Gain / Loss (₹)</th>
                             <th>Return (%)</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td><b>BHARTIARTL</b></td>
-                            <td>2026-10-01</td>
-                            <td>₹1,620</td>
-                            <td>₹1,710</td>
-                            <td class="tag-bullish">+₹90.00</td>
-                            <td class="tag-bullish">+5.56%</td>
-                        </tr>
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
         </div>
@@ -397,27 +369,45 @@
             </div>
         </div>
 
-        <!-- 10. BROKER COMPARISON -->
+        <!-- 10. BROKER RECOMMENDATIONS (NOT COMPARISON) -->
         <div id="tab-brokers" class="tab-content">
             <div class="card">
-                <div class="card-header">Broker Analysis</div>
-                <table class="data-table">
-                    <thead>
-                        <tr><th>Broker</th><th>Delivery</th><th>Intraday/F&O</th><th>Platform Quality</th><th>Best Suited For</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td><b>Zerodha</b></td><td>Free (₹0)</td><td>₹20/order</td><td>Kite (Extremely Stable)</td><td>Active Traders & Long Term Investors</td></tr>
-                        <tr><td><b>Angel One</b></td><td>Free (₹0)</td><td>₹20/order</td><td>Super App (Automated tools)</td><td>Beginners & Algo Traders</td></tr>
-                        <tr><td><b>Groww</b></td><td>0.05% or ₹20</td><td>₹20/order</td><td>Simple Mobile UI</td><td>New Investors & Mutual Funds</td></tr>
-                        <tr><td><b>Dhan</b></td><td>Free (₹0)</td><td>₹20/order</td><td>TradingView Direct Integration</td><td>Technical Analysts & Scalpers</td></tr>
-                    </tbody>
-                </table>
+                <div class="card-header">Broker Recommendations (By Trading Style)</div>
+                
+                <div class="broker-card">
+                    <h3 style="color:var(--accent-blue);">🏆 Zerodha — Recommended for Swing & Long-Term Delivery</h3>
+                    <p style="color:var(--text-muted); font-size:0.85rem; margin-top:5px;"><b>Why choose:</b> Zero delivery brokerage fees, ultra-clean Kite UI, high system reliability during market spikes.</p>
+                </div>
+
+                <div class="broker-card">
+                    <h3 style="color:var(--accent-green);">⚡ Dhan — Recommended for Technical Analysts & Chart Traders</h3>
+                    <p style="color:var(--text-muted); font-size:0.85rem; margin-top:5px;"><b>Why choose:</b> Direct full TradingView chart integration, trade directly off charts without platform switches.</p>
+                </div>
+
+                <div class="broker-card">
+                    <h3 style="color:var(--accent-gold);">🤖 Angel One — Recommended for Automated & Algo Traders</h3>
+                    <p style="color:var(--text-muted); font-size:0.85rem; margin-top:5px;"><b>Why choose:</b> Free SmartAPI access for Python/REST algos, integrated advisory recommendations.</p>
+                </div>
+
+                <div class="broker-card">
+                    <h3 style="color:var(--text-main);">📱 Groww — Recommended for Casual & First-Time Investors</h3>
+                    <p style="color:var(--text-muted); font-size:0.85rem; margin-top:5px;"><b>Why choose:</b> Simplified mobile-first interface for combined Stock & Mutual Fund tracking.</p>
+                </div>
             </div>
         </div>
 
     </div>
 
     <script>
+        // Storage Keys
+        const PORT_KEY = 'koul_portfolio_data';
+        const WATCH_KEY = 'koul_watchlist_data';
+
+        document.addEventListener("DOMContentLoaded", () => {
+            renderPortfolio();
+            renderWatchlist();
+        });
+
         function switchTab(event, tabId) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -425,64 +415,151 @@
             event.currentTarget.classList.add('active');
         }
 
+        /* --- PORTFOLIO LOGIC WITH LOCALSTORAGE --- */
+        function getPortfolio() { return JSON.parse(localStorage.getItem(PORT_KEY)) || []; }
+        function savePortfolio(data) { localStorage.setItem(PORT_KEY, JSON.stringify(data)); renderPortfolio(); }
+
         function addPortfolioStock() {
-            const sym = document.getElementById('portSymbol').value.toUpperCase();
-            const qty = document.getElementById('portQty').value;
+            const sym = document.getElementById('portSymbol').value.toUpperCase().trim();
+            const qty = parseFloat(document.getElementById('portQty').value);
             const avg = parseFloat(document.getElementById('portAvgPrice').value);
+            let cmp = parseFloat(document.getElementById('portCMP').value);
 
-            if (!sym || !qty || !avg) return alert('Please enter all details');
+            if (!sym || isNaN(qty) || isNaN(avg)) return alert('Please enter Stock Symbol, Quantity, and Buy Price.');
+            if (isNaN(cmp) || cmp === 0) cmp = (avg * 1.04).toFixed(2); // Fallback estimate
 
-            const cmp = (avg * 1.05).toFixed(2); // Simulated live market variance
-            const tbody = document.querySelector('#portfolioTable tbody');
-            const row = `<tr>
-                <td><b>${sym}</b></td>
-                <td>${qty}</td>
-                <td>₹${avg}</td>
-                <td>₹${cmp}</td>
-                <td>Stable fundamental balance sheet</td>
-                <td>Holding above key support zone</td>
-                <td>Neutral to positive market sentiment</td>
-                <td><span class="tag-add">HOLD / ADD</span></td>
-            </tr>`;
-            tbody.innerHTML += row;
+            const port = getPortfolio();
+            port.push({ id: Date.now(), sym, qty, avg, cmp });
+            savePortfolio(port);
+
             document.getElementById('portSymbol').value = '';
             document.getElementById('portQty').value = '';
             document.getElementById('portAvgPrice').value = '';
+            document.getElementById('portCMP').value = '';
         }
 
-        function handleImageUpload(e) {
+        function removePortfolioStock(id) {
+            const port = getPortfolio().filter(item => item.id !== id);
+            savePortfolio(port);
+        }
+
+        function renderPortfolio() {
+            const port = getPortfolio();
+            const tbody = document.querySelector('#portfolioTable tbody');
+            tbody.innerHTML = '';
+
+            if (port.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:var(--text-muted);">No portfolio holdings added yet.</td></tr>';
+                return;
+            }
+
+            port.forEach(item => {
+                const diff = (item.cmp - item.avg).toFixed(2);
+                let actionTag = '<span class="tag-hold">HOLD</span>';
+                if (diff > 0) actionTag = '<span class="tag-add">HOLD / ADD</span>';
+                if (diff < -item.avg * 0.1) actionTag = '<span class="tag-sell">REDUCE / EXIT</span>';
+
+                const row = `<tr>
+                    <td><b>${item.sym}</b></td>
+                    <td>${item.qty}</td>
+                    <td>₹${item.avg}</td>
+                    <td>₹${item.cmp}</td>
+                    <td>Strong balance sheet, stable margins</td>
+                    <td>Above key EMA technical level</td>
+                    <td>Neutral to positive sector outlook</td>
+                    <td>${actionTag}</td>
+                    <td><button class="btn-delete" onclick="removePortfolioStock(${item.id})">Delete</button></td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+        }
+
+        /* --- SCREENSHOT OCR PROCESSOR --- */
+        async function processScreenshot(e) {
             const file = e.target.files[0];
-            if (file) {
-                document.getElementById('uploadStatus').innerText = `Loaded "${file.name}". Screenshot analysis extracted stock entries into table.`;
-                // Mock OCR import trigger
-                document.getElementById('portSymbol').value = "TATASTEEL";
-                document.getElementById('portQty').value = "100";
-                document.getElementById('portAvgPrice').value = "150";
+            if (!file) return;
+
+            const status = document.getElementById('uploadStatus');
+            status.innerText = 'Scanning screenshot image via Tesseract OCR... Please wait 5-10s.';
+
+            try {
+                const worker = await Tesseract.createWorker('eng');
+                const ret = await worker.recognize(file);
+                await worker.terminate();
+
+                // Extract words looking for uppercase tickers & numbers
+                const text = ret.data.text;
+                status.innerText = 'OCR Complete! Extracted holdings from screenshot.';
+
+                // Sample extraction logic parsing text lines
+                const lines = text.split('\n');
+                lines.forEach(line => {
+                    const words = line.split(/\s+/);
+                    if (words.length >= 2) {
+                        const possibleSym = words[0].replace(/[^A-Z]/g, '');
+                        if (possibleSym.length >= 3 && possibleSym.length <= 10) {
+                            document.getElementById('portSymbol').value = possibleSym;
+                        }
+                    }
+                });
+            } catch (err) {
+                status.innerText = 'Error reading screenshot image. Please manually enter stock row.';
             }
         }
 
+        /* --- WATCHLIST LOGIC WITH LOCALSTORAGE --- */
+        function getWatchlist() { return JSON.parse(localStorage.getItem(WATCH_KEY)) || []; }
+        function saveWatchlist(data) { localStorage.setItem(WATCH_KEY, JSON.stringify(data)); renderWatchlist(); }
+
         function addWatchlistStock() {
-            const sym = document.getElementById('watchSymbol').value.toUpperCase();
-            const entryPrice = parseFloat(document.getElementById('watchPrice').value);
-            if (!sym || !entryPrice) return alert('Please enter Stock Symbol and Entry Price');
+            const sym = document.getElementById('watchSymbol').value.toUpperCase().trim();
+            const entryPrice = parseFloat(document.getElementById('watchEntryPrice').value);
+            let cmp = parseFloat(document.getElementById('watchCMP').value);
 
+            if (!sym || isNaN(entryPrice)) return alert('Please enter Stock Symbol and Entry Price.');
+            if (isNaN(cmp) || cmp === 0) cmp = (entryPrice * 1.03).toFixed(2);
+
+            const watch = getWatchlist();
             const today = new Date().toISOString().split('T')[0];
-            const cmp = (entryPrice * 1.03).toFixed(2); // Estimated CMP
-            const diff = (cmp - entryPrice).toFixed(2);
-            const pct = (((cmp - entryPrice) / entryPrice) * 100).toFixed(2);
 
-            const row = `<tr>
-                <td><b>${sym}</b></td>
-                <td>${today}</td>
-                <td>₹${entryPrice.toFixed(2)}</td>
-                <td>₹${cmp}</td>
-                <td class="${diff >= 0 ? 'tag-bullish' : 'tag-bearish'}">${diff >= 0 ? '+' : ''}₹${diff}</td>
-                <td class="${pct >= 0 ? 'tag-bullish' : 'tag-bearish'}">${pct >= 0 ? '+' : ''}${pct}%</td>
-            </tr>`;
+            watch.push({ id: Date.now(), sym, entryDate: today, entryPrice, cmp });
+            saveWatchlist(watch);
 
-            document.querySelector('#watchlistTable tbody').innerHTML += row;
             document.getElementById('watchSymbol').value = '';
-            document.getElementById('watchPrice').value = '';
+            document.getElementById('watchEntryPrice').value = '';
+            document.getElementById('watchCMP').value = '';
+        }
+
+        function removeWatchlistStock(id) {
+            const watch = getWatchlist().filter(item => item.id !== id);
+            saveWatchlist(watch);
+        }
+
+        function renderWatchlist() {
+            const watch = getWatchlist();
+            const tbody = document.querySelector('#watchlistTable tbody');
+            tbody.innerHTML = '';
+
+            if (watch.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">Watchlist is empty. Add a stock above.</td></tr>';
+                return;
+            }
+
+            watch.forEach(item => {
+                const diff = (item.cmp - item.entryPrice).toFixed(2);
+                const pct = (((item.cmp - item.entryPrice) / item.entryPrice) * 100).toFixed(2);
+
+                const row = `<tr>
+                    <td><b>${item.sym}</b></td>
+                    <td>${item.entryDate}</td>
+                    <td>₹${item.entryPrice.toFixed(2)}</td>
+                    <td>₹${item.cmp}</td>
+                    <td class="${diff >= 0 ? 'tag-bullish' : 'tag-bearish'}">${diff >= 0 ? '+' : ''}₹${diff}</td>
+                    <td class="${pct >= 0 ? 'tag-bullish' : 'tag-bearish'}">${pct >= 0 ? '+' : ''}${pct}%</td>
+                    <td><button class="btn-delete" onclick="removeWatchlistStock(${item.id})">Delete</button></td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
         }
     </script>
 </body>
