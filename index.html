@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Koul Market Analysis - Daily Market Artifact</title>
+    <style>
+        :root {
+            --bg-primary: #121721;
+            --bg-secondary: #1a2130;
+            --card-bg: #222b3e;
+            --text-main: #f0f4f8;
+            --text-muted: #94a3b8;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-blue: #3b82f6;
+            --accent-gold: #eab308;
+            --accent-silver: #94a3b8;
+            --border-color: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand h1 {
+            font-size: 1.4rem;
+            color: var(--accent-blue);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .live-badge {
+            background-color: rgba(16, 185, 129, 0.2);
+            color: var(--accent-green);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+
+        /* Ticker Tape Styling */
+        .ticker-container {
+            width: 100%;
+            height: 46px;
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        /* Tabs Navigation */
+        .nav-tabs {
+            display: flex;
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            padding: 14px 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-main);
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+
+        .tab-btn.active {
+            color: var(--accent-blue);
+            border-bottom-color: var(--accent-blue);
+            background-color: rgba(59, 130, 246, 0.08);
+        }
+
+        /* Main Content Container */
+        .content-container {
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Section Cards & Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 20px;
+        }
+
+        .grid-full {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .card-header {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-main);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 0.88rem;
+        }
+
+        .data-table th, .data-table td {
+            padding: 12px 10px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .data-table th {
+            background-color: rgba(0, 0, 0, 0.2);
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .tag-bullish { color: var(--accent-green); font-weight: bold; }
+        .tag-bearish { color: var(--accent-red); font-weight: bold; }
+        .tag-neutral { color: var(--accent-gold); font-weight: bold; }
+
+        /* External Links Header */
+        .external-links {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .ext-btn {
+            background-color: var(--bg-secondary);
+            color: var(--accent-blue);
+            border: 1px solid var(--border-color);
+            padding: 8px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+        }
+
+        .ext-btn:hover {
+            background-color: var(--accent-blue);
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .grid-2 { grid-template-columns: 1fr; }
+            .nav-tabs { font-size: 0.8rem; }
+            .tab-btn { padding: 10px 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="brand">
+            <h1>KOUL MARKET ANALYSIS</h1>
+            <span class="live-badge"><div class="live-dot"></div> LIVE STREAMING</span>
+        </div>
+        <div style="font-size: 0.85rem; color: var(--text-muted);">
+            Daily Market Intelligence Artifact
+        </div>
+    </header>
+
+    <!-- TradingView Ticker Tape Widget -->
+    <div class="ticker-container">
+        <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+            {
+                "symbols": [
+                    {"proName": "BSE:SENSEX", "title": "SENSEX"},
+                    {"proName": "NSE:NIFTY", "title": "NIFTY 50"},
+                    {"proName": "NSE:BANKNIFTY", "title": "BANK NIFTY"},
+                    {"proName": "FX_IDC:USDINR", "title": "USD/INR"},
+                    {"proName": "TVC:GOLD", "title": "GOLD Spot"},
+                    {"proName": "TVC:SILVER", "title": "SILVER Spot"},
+                    {"proName": "FOREXCOM:SPXUSD", "title": "S&P 500"}
+                ],
+                "showSymbolLogo": true,
+                "colorTheme": "dark",
+                "isTransparent": true,
+                "displayMode": "adaptive",
+                "locale": "in"
+            }
+            </script>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab(event, 'tab-overview')">Market Overview</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab-intraday')">Intraday Picks</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab-shortterm')">Short Term (1-3 Mo)</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab-swing')">Swing Trade</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab-longterm')">Long Term Picks</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab-etf')">Gold & Silver ETF</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab-international')">Global Markets</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab-brokers')">Broker Comparison</button>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="content-container">
+
+        <!-- Quick Access Live Resources Bar -->
+        <div class="external-links">
+            <a href="https://in.tradingview.com/" target="_blank" class="ext-btn">📊 TradingView India</a>
+            <a href="https://www.moneycontrol.com/" target="_blank" class="ext-btn">📰 Moneycontrol</a>
+            <a href="https://www.ft.com/markets" target="_blank" class="ext-btn">🌐 Financial Times</a>
+            <a href="https://www.nseindia.com/" target="_blank" class="ext-btn">🏛️ NSE Official</a>
+            <a href="https://www.bseindia.com/" target="_blank" class="ext-btn">🏢 BSE Official</a>
+        </div>
+
+        <!-- 1. DAILY MARKET OVERVIEW -->
+        <div id="tab-overview" class="tab-content active">
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">Nifty 50 Live Technical Chart</div>
+                    <div style="height: 400px;">
+                        <div class="tradingview-widget-container" style="height:100%;width:100%">
+                            <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
+                            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+                            {
+                                "autosize": true,
+                                "symbol": "NSE:NIFTY",
+                                "interval": "D",
+                                "timezone": "Asia/Kolkata",
+                                "theme": "dark",
+                                "style": "1",
+                                "locale": "in",
+                                "allow_symbol_change": true,
+                                "calendar": false
+                            }
+                            </script>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Indian Market Heatmap</div>
+                    <div style="height: 400px;">
+                        <div class="tradingview-widget-container">
+                            <div class="tradingview-widget-container__widget"></div>
+                            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js" async>
+                            {
+                                "exchanges": ["NSE"],
+                                "dataSource": "SENSEX",
+                                "grouping": "sector",
+                                "blockSize": "market_cap_basic",
+                                "blockColor": "change",
+                                "locale": "in",
+                                "symbolUrl": "",
+                                "colorTheme": "dark",
+                                "hasTopBar": false,
+                                "isDataSetEnabled": false,
+                                "isZoomEnabled": true,
+                                "hasSymbolTooltip": true,
+                                "width": "100%",
+                                "height": "400"
+                            }
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. INTRADAY PICKS -->
+        <div id="tab-intraday" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <span>Intraday Stock Screener (High Liquidity & Momentum)</span>
+                    <span style="font-size: 0.8rem; color: var(--text-muted);">Refreshed Daily for Day Traders</span>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Stock</th>
+                            <th>Bias</th>
+                            <th>Entry Zone</th>
+                            <th>Target 1 / 2</th>
+                            <th>Stop Loss</th>
+                            <th>Technical Rationale</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><b>TATAMOTORS</b></td>
+                            <td><span class="tag-bullish">BUY</span></td>
+                            <td>Near VWAP Breakout</td>
+                            <td>1:1.5 / 1:2 R:R</td>
+                            <td>Below Day Low</td>
+                            <td>Opening Range Breakout (ORB) above 15-min 20 EMA with rising volume.</td>
+                        </tr>
+                        <tr>
+                            <td><b>ICICIBANK</b></td>
+                            <td><span class="tag-bullish">BUY</span></td>
+                            <td>Pullback to 9 EMA</td>
+                            <td>+1.2% / +2.0%</td>
+                            <td>0.7% below entry</td>
+                            <td>Strong banking sector momentum, crossing daily VWAP with high relative volume.</td>
+                        </tr>
+                        <tr>
+                            <td><b>INFY</b></td>
+                            <td><span class="tag-bearish">SELL SHORT</span></td>
+                            <td>Below Support Zone</td>
+                            <td>-1.0% / -1.8%</td>
+                            <td>0.6% above high</td>
+                            <td>Rejection at daily pivot resistance; RSI bearish divergence on 5-min chart.</td>
+                        </tr>
+                        <tr>
+                            <td><b>RELIANCE</b></td>
+                            <td><span class="tag-bullish">BUY</span></td>
+                            <td>Consolidation Breakout</td>
+                            <td>+1.5% / +2.5%</td>
+                            <td>0.8% Stop Loss</td>
+                            <td>Symmetrical triangle pattern breakout on 15-minute timeframe.</td>
+                        </tr>
+                        <tr>
+                            <td><b>AXISBANK</b></td>
+                            <td><span class="tag-bearish">SELL SHORT</span></td>
+                            <td>Breakdown below VWAP</td>
+                            <td>-1.2% / -2.0%</td>
+                            <td>0.7% Stop Loss</td>
+                            <td>Heavy institutional selling at morning high; lower low pattern on 5-min chart.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 3. SHORT TERM PICKS -->
+        <div id="tab-shortterm" class="tab-content">
+            <div class="card">
+                <div class="card-header">Short Term Growth & Momentum Picks (1 - 3 Months Horizon)</div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Stock Name</th>
+                            <th>Sector</th>
+                            <th>Fundamental Catalyst</th>
+                            <th>Technical Setup</th>
+                            <th>Target</th>
+                            <th>Stop Loss</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><b>BHARTIARTL</b></td>
+                            <td>Telecom</td>
+                            <td>ARPU hike expectations, 5G market leadership</td>
+                            <td>Flag & Pole breakout pattern on weekly chart</td>
+                            <td>+15% to 18%</td>
+                            <td>-6%</td>
+                        </tr>
+                        <tr>
+                            <td><b>L&T</b></td>
+                            <td>Capital Goods</td>
+                            <td>Order book expansion, record govt capex spending</td>
+                            <td>Bouncing strong off 50-day Simple Moving Average</td>
+                            <td>+12% to 15%</td>
+                            <td>-5%</td>
+                        </tr>
+                        <tr>
+                            <td><b>TRENT</b></td>
+                            <td>Retail</td>
+                            <td>Aggressive store additions (Zudio), solid margin growth</td>
+                            <td>Sustained momentum making consecutive higher highs</td>
+                            <td>+20%</td>
+                            <td>-8%</td>
+                        </tr>
+                        <tr>
+                            <td><b>HAL</b></td>
+                            <td>Defense</td>
+                            <td>Strong defense order pipeline & indigenization push</td>
+                            <td>Consolidation pattern near lifetime highs</td>
+                            <td>+18%</td>
+                            <td>-7%</td>
+                        </tr>
+                        <tr>
+                            <td><b>NTPC</b></td>
+                            <td>Power / Green Energy</td>
+                            <td>Green power IPO monetization and capacity expansion</td>
+                            <td>Ascending triangle breakout on daily timeframe</td>
+                            <td>+14%</td>
+                            <td>-5%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 4. SWING TRADE -->
+        <div id="tab-swing" class="tab-content">
+            <div class="card">
+                <div class="card-header">Swing Trading Ideas (1 - 4 Weeks Horizon)</div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Stock</th>
+                            <th>Technical Trigger</th>
+                            <th>RSI Status</th>
+                            <th>Volume Analysis</th>
+                            <th>Target</th>
+                            <th>Stop Loss</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><b>DLF</b></td>
+                            <td>Reversal from major support level</td>
+                            <td>RSI oversold rebound (>40)</td>
+                            <td>3x average daily volume on green candle</td>
+                            <td>+8% to 10%</td>
+                            <td>-3.5%</td>
+                        </tr>
+                        <tr>
+                            <td><b>SUNPHARMA</b></td>
+                            <td>20 EMA dynamic support bounce</td>
+                            <td>RSI neutral-bullish (58)</td>
+                            <td>Steady accumulation volume</td>
+                            <td>+7% to 9%</td>
+                            <td>-3.0%</td>
+                        </tr>
+                        <tr>
+                            <td><b>TATASTEEL</b></td>
+                            <td>Double Bottom chart pattern confirmation</td>
+                            <td>Bullish RSI Crossover</td>
+                            <td>Volume surge on pattern breakout line</td>
+                            <td>+10%</td>
+                            <td>-4.0%</td>
+                        </tr>
+                        <tr>
+                            <td><b>MARUTI</b></td>
+                            <td>Cup & Handle formation on Daily chart</td>
+                            <td>RSI bullish (62)</td>
+                            <td>Above 20-day volume average</td>
+                            <td>+8%</td>
+                            <td>-3.5%</td>
+                        </tr>
+                        <tr>
+                            <td><b>STATEBANK</b></td>
+                            <td>Breakout above horizontal resistance</td>
+                            <td>RSI strong momentum (65)</td>
+                            <td>Institutional buying block deals observed</td>
+                            <td>+9%</td>
+                            <td>-3.8%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 5. LONG TERM PICKS -->
+        <div id="tab-longterm" class="tab-content">
+            <div class="card">
+                <div class="card-header">Long Term Wealth Accumulation (3 - 5 Years Horizon)</div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Moat / Competitive Advantage</th>
+                            <th>ROE / ROCE</th>
+                            <th>Revenue CAGR (3Yr)</th>
+                            <th>Fundamental Rating</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><b>RELIANCE IND.</b></td>
+                            <td>Market leader in Retail, Telecom (Jio), and Green Energy transition</td>
+                            <td>> 12% / 14%</td>
+                            <td>15%+</td>
+                            <td><span class="tag-bullish">STRONG BUY</span></td>
+                        </tr>
+                        <tr>
+                            <td><b>HDFC BANK</b></td>
+                            <td>Largest private lender, vast distribution network & deposit base</td>
+                            <td>> 16% / 17%</td>
+                            <td>18%+</td>
+                            <td><span class="tag-bullish">STRONG BUY</span></td>
+                        </tr>
+                        <tr>
+                            <td><b>TCS</b></td>
+                            <td>IT services titan, debt-free balance sheet, industry-leading margins</td>
+                            <td>> 45% / 50%</td>
+                            <td>10%+</td>
+                            <td><span class="tag-bullish">BUY</span></td>
+                        </tr>
+                        <tr>
+                            <td><b>TITAN COMPANY</b></td>
+                            <td>Dominant brand strength in organised retail jewelry & watches</td>
+                            <td>> 25% / 28%</td>
+                            <td>20%+</td>
+                            <td><span class="tag-bullish">STRONG BUY</span></td>
+                        </tr>
+                        <tr>
+                            <td><b>CHOLAFIN</b></td>
+                            <td>Best-in-class asset quality in commercial vehicle & diversified lending</td>
+                            <td>> 18% / 20%</td>
+                            <td>22%+</td>
+                            <td><span class="tag-bullish">BUY</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 6. GOLD & SILVER ETF ANALYSIS -->
+        <div id="tab-etf" class="tab-content">
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">Gold ETF Market Analysis (e.g. GOLDBEES)</div>
+                    <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 12px;">
+                        <b>Daily Assessment:</b> Safe-haven demand driven by central bank buying and macroeconomic policy shifts. Excellent portfolio hedge against inflation and equity volatility.
+                    </p>
+                    <table class="data-table">
+                        <thead>
+                            <tr><th>Instrument</th><th>Benchmark Tracking</th><th>Liquidity Rating</th><th>Actionable Stance</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><b>Nippon India Gold ETF (GOLDBEES)</b></td>
+                                <td>Domestic Physical Gold Price</td>
+                                <td>Very High</td>
+                                <td><span class="tag-bullish">Accumulate on Dips</span></td>
+                            </tr>
+                            <tr>
+                                <td><b>HDFC Gold ETF</b></td>
+                                <td>Domestic Physical Gold Price</td>
+                                <td>High</td>
+                                <td><span class="tag-bullish">Accumulate on Dips</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Silver ETF Market Analysis (e.g. SILVERBEES)</div>
+                    <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 12px;">
+                        <b>Daily Assessment:</b> Strong dual demand driven by industrial consumption (EVs, solar panels, 5G hardware) and precious metal status. Higher volatility than Gold.
+                    </p>
+                    <table class="data-table">
+                        <thead>
+                            <tr><th>Instrument</th><th>Benchmark Tracking</th><th>Liquidity Rating</th><th>Actionable Stance</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><b>Nippon India Silver ETF (SILVERBEES)</b></td>
+                                <td>Domestic Physical Silver Price</td>
+                                <td>Very High</td>
+                                <td><span class="tag-bullish">SIP / Tactical Buy</span></td>
+                            </tr>
+                            <tr>
+                                <td><b>ICICI Pru Silver ETF</b></td>
+                                <td>Domestic Physical Silver Price</td>
+                                <td>High</td>
+                                <td><span class="tag-bullish">SIP / Tactical Buy</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. GLOBAL MARKETS -->
+        <div id="tab-international" class="tab-content">
+            <div class="card">
+                <div class="card-header">Global Indices & Currencies Monitor</div>
+                <div style="height: 500px;">
+                    <div class="tradingview-widget-container">
+                        <div class="tradingview-widget-container__widget"></div>
+                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+                        {
+                            "colorTheme": "dark",
+                            "dateRange": "1D",
+                            "showChart": true,
+                            "locale": "in",
+                            "largeChartUrl": "",
+                            "isTransparent": true,
+                            "showSymbolLogo": true,
+                            "showFloatingTooltip": true,
+                            "width": "100%",
+                            "height": "500",
+                            "tabs": [
+                                {
+                                    "title": "Global Indices",
+                                    "symbols": [
+                                        {"s": "FOREXCOM:SPXUSD", "d": "S&P 500"},
+                                        {"s": "FOREXCOM:NSXUSD", "d": "US Tech 100"},
+                                        {"s": "INDEX:NKY", "d": "Nikkei 225"},
+                                        {"s": "INDEX:DEU40", "d": "DAX Index"},
+                                        {"s": "FOREXCOM:UKXGBP", "d": "FTSE 100"}
+                                    ]
+                                },
+                                {
+                                    "title": "Commodities & Forex",
+                                    "symbols": [
+                                        {"s": "TVC:GOLD", "d": "Gold"},
+                                        {"s": "TVC:SILVER", "d": "Silver"},
+                                        {"s": "TVC:USOIL", "d": "Crude Oil"},
+                                        {"s": "FX_IDC:USDINR", "d": "USD / INR"}
+                                    ]
+                                }
+                            ]
+                        }
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. BROKER ANALYSIS -->
+        <div id="tab-brokers" class="tab-content">
+            <div class="card">
+                <div class="card-header">Indian Stockbrokers Analysis & Comparative Study</div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Broker</th>
+                            <th>Type</th>
+                            <th>Equity Delivery</th>
+                            <th>Intraday & F&O</th>
+                            <th>Trading Platform Quality</th>
+                            <th>Best Suited For</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><b>Zerodha</b></td>
+                            <td>Discount</td>
+                            <td>Free (₹0)</td>
+                            <td>Flat ₹20 per order</td>
+                            <td>Kite (Exceptional stability & clean UI)</td>
+                            <td>Investors, Active Swing & Intraday Traders</td>
+                        </tr>
+                        <tr>
+                            <td><b>Angel One</b></td>
+                            <td>Full Service / Disc.</td>
+                            <td>Free (₹0)</td>
+                            <td>Flat ₹20 per order</td>
+                            <td>Super App (Advanced charts & automated tools)</td>
+                            <td>Beginners and Algo Traders (Free API)</td>
+                        </tr>
+                        <tr>
+                            <td><b>Groww</b></td>
+                            <td>Discount</td>
+                            <td>0.05% or ₹20</td>
+                            <td>Flat ₹20 per order</td>
+                            <td>Simple UI / Mobile First</td>
+                            <td>New Market Entrants & Mutual Fund Investors</td>
+                        </tr>
+                        <tr>
+                            <td><b>ICICI Direct</b></td>
+                            <td>Full Service (3-in-1)</td>
+                            <td>Percentage / Prepaid plans</td>
+                            <td>Flat options plans available</td>
+                            <td>Trade Racer / Web Portal</td>
+                            <td>HNI Investors wanting seamless banking & research reports</td>
+                        </tr>
+                        <tr>
+                            <td><b>Dhan</b></td>
+                            <td>Discount</td>
+                            <td>Free (₹0)</td>
+                            <td>Flat ₹20 per order</td>
+                            <td>Custom TradingView Console Integration</td>
+                            <td>Advanced Technical Analysts & Scalpers</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function switchTab(event, tabId) {
+            // Hide all tabs
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // Deactivate all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Show selected tab and activate button
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html>
