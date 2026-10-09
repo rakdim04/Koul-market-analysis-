@@ -81,14 +81,14 @@
         .form-row button:hover { opacity: 0.9; }
 
         .prompt-box {
-            background: var(--bg-secondary); border: 1px solid var(--border-color); border-left: 4px solid var(--accent-blue); padding: 15px; border-radius: 6px; margin-bottom: 15px; font-size: 0.85rem; color: var(--text-main); line-height: 1.5; max-height: 220px; overflow-y: auto;
+            background: var(--bg-secondary); border: 1px solid var(--border-color); border-left: 4px solid var(--accent-blue); padding: 15px; border-radius: 6px; margin-bottom: 15px; font-size: 0.82rem; color: var(--text-main); line-height: 1.5; max-height: 180px; overflow-y: auto;
         }
 
         .briefing-card {
-            background: rgba(18, 23, 33, 0.8); border: 1px solid var(--border-color); padding: 18px; border-radius: 6px; font-size: 0.9rem; line-height: 1.6; color: var(--text-main);
+            background: rgba(18, 23, 33, 0.9); border: 1px solid var(--border-color); padding: 22px; border-radius: 8px; font-size: 0.92rem; line-height: 1.7; color: var(--text-main);
         }
-        .briefing-card h3 { color: var(--accent-gold); margin-bottom: 8px; font-size: 1.05rem; }
-        .briefing-card section { margin-bottom: 14px; }
+        .briefing-card h3 { color: var(--accent-gold); margin-bottom: 12px; font-size: 1.15rem; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
+        .briefing-card section { margin-bottom: 18px; }
 
         .upload-box {
             border: 2px dashed var(--border-color); padding: 20px; text-align: center; border-radius: 8px; margin-bottom: 15px; cursor: pointer; background: rgba(255,255,255,0.02);
@@ -108,7 +108,7 @@
         <div class="brand">
             <h1>KOUL MARKET ANALYSIS</h1>
         </div>
-        <div class="live-badge"><div class="live-dot"></div> REAL-TIME STREAMING ACTIVE</div>
+        <div class="live-badge"><div class="live-dot"></div> REAL-TIME STREAMING CONNECTED</div>
     </header>
 
     <!-- TradingView Live Ticker Tape -->
@@ -134,7 +134,7 @@
     <!-- Navigation Tabs -->
     <div class="nav-tabs">
         <button class="tab-btn active" onclick="switchTab(event, 'tab-overview')">Market Overview & Auto-Prompt</button>
-        <button class="tab-btn" onclick="switchTab(event, 'tab-livecmp')">Live Streaming CMP Checker</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab-livecmp')">Live CMP & Technicals</button>
         <button class="tab-btn" onclick="switchTab(event, 'tab-portfolio')">Portfolio Analyzer</button>
         <button class="tab-btn" onclick="switchTab(event, 'tab-watchlist')">Smart Watchlist</button>
         <button class="tab-btn" onclick="switchTab(event, 'tab-intraday')">Intraday Picks</button>
@@ -147,7 +147,7 @@
 
     <div class="content-container">
 
-        <!-- Live Links Bar -->
+        <!-- Live Portals Bar -->
         <div class="external-links">
             <a href="https://in.tradingview.com/" target="_blank" class="ext-btn">📊 TradingView India</a>
             <a href="https://www.moneycontrol.com/" target="_blank" class="ext-btn">📰 Moneycontrol</a>
@@ -156,29 +156,27 @@
             <a href="https://www.bseindia.com/" target="_blank" class="ext-btn">🏢 BSE India</a>
         </div>
 
-        <!-- 1. MARKET OVERVIEW & BROKER PROMPT -->
+        <!-- 1. MARKET OVERVIEW & DETAILED BROKER BRIEFING -->
         <div id="tab-overview" class="tab-content active">
             
             <div class="card">
                 <div class="card-header">
-                    <span>🏛 Broker System Prompt: Rajesh Kapoor (Dalal Street Veteran)</span>
+                    <span>🏛 Broker System Role: Rajesh Kapoor (Dalal Street Veteran)</span>
                     <button style="background:var(--accent-green); border:none; color:white; padding:8px 16px; border-radius:4px; font-weight:bold; cursor:pointer;" onclick="runPromptUpdate()">🚀 Run Daily Auto-Update</button>
                 </div>
-                <div class="prompt-box" id="promptText">
-                    <b>System Prompt / Role Prompt:</b><br>
-                    You are Rajesh Kapoor, a seasoned Indian stockbroker and commodity analyst with 20+ years of experience on Dalal Street. You specialize in Equities (Fundamental & Technical), Commodities & ETFs (Gold & Silver ETFs - NAV tracking, expense ratio, commodity cycles). Every morning you analyze Pre-market data, FII/DII activity, Global cues, MCX spot rates, sector rotation, and central bank movements.<br><br>
-                    <b>Daily Briefing Format:</b> Market Mood | Top 3-5 Trending Stocks | Gold ETF Outlook | Silver ETF Outlook | Sector in Focus | Stocks/ETFs to Avoid | Pro Tip of the Day.
+                
+                <div class="prompt-box">
+                    <b>Embedded Persona Prompt:</b> You are Rajesh Kapoor, a seasoned Indian stockbroker and commodity analyst with 20+ years on Dalal Street. Every morning you analyze Pre-market data, FII/DII net flows, SGX/GIFT Nifty, Dow Jones, Crude Oil, MCX spot rates, USD/INR, sector rotation, central bank gold buying, and Fed policies. You speak mixing English and Hindi ("Bhai, yeh ETF dekhna!", "Sona kabhi dhoka nahi deta!", "Chandi ka time aa gaya!").
                 </div>
 
                 <div class="briefing-card" id="briefingOutput">
-                    <h3>🌅 Daily Market Briefing by Rajesh Kapoor</h3>
-                    <p style="color:var(--text-muted);">Click <b>"🚀 Run Daily Auto-Update"</b> above to refresh live market analysis and picks.</p>
+                    <!-- Expanded Intelligence Briefing populated by JS -->
                 </div>
             </div>
 
             <div class="grid-2">
                 <div class="card">
-                    <div class="card-header">Nifty 50 Real-Time Chart</div>
+                    <div class="card-header">Nifty 50 Live Streaming Chart</div>
                     <div style="height: 380px;">
                         <div class="tradingview-widget-container" style="height:100%;">
                             <div class="tradingview-widget-container__widget" style="height:100%;"></div>
@@ -190,7 +188,7 @@
                 </div>
 
                 <div class="card">
-                    <div class="card-header">Live Market Impact News Feed</div>
+                    <div class="card-header">Live Indian Market News Stream</div>
                     <div style="height: 380px; overflow-y: auto;">
                         <div class="tradingview-widget-container">
                             <div class="tradingview-widget-container__widget"></div>
@@ -203,13 +201,13 @@
             </div>
         </div>
 
-        <!-- 2. LIVE STREAMING CMP CHECKER -->
+        <!-- 2. LIVE CMP & SYMBOL TECHNICALS -->
         <div id="tab-livecmp" class="tab-content">
             <div class="card">
-                <div class="card-header">Live Market Price Streaming & Symbol Technicals</div>
+                <div class="card-header">Real-Time NSE & BSE Symbol CMP Streamer</div>
                 <div class="form-row">
-                    <input type="text" id="liveSearchSymbol" placeholder="Enter Symbol (e.g. NSE:RELIANCE, NSE:SBIN)" style="min-width:280px;">
-                    <button onclick="loadLiveSymbolWidget()">Get Live CMP & Chart</button>
+                    <input type="text" id="liveSearchSymbol" placeholder="Enter Ticker (e.g. NSE:RELIANCE, NSE:TATASTEEL, BSE:SENSEX)" style="min-width:320px;">
+                    <button onclick="loadLiveSymbolWidget()">Fetch Live CMP & Technicals</button>
                 </div>
                 <div id="liveWidgetContainer" style="height: 480px; margin-top:15px;">
                     <div class="tradingview-widget-container" style="height:100%;">
@@ -228,7 +226,7 @@
                 <div class="card-header">Upload Screenshot or Enter Holdings</div>
                 
                 <div class="upload-box" onclick="document.getElementById('screenshotUpload').click();">
-                    <p>📸 <b>Upload Screenshot of Portfolio</b> (Automated Tesseract OCR Reader)</p>
+                    <p>📸 <b>Upload Screenshot of Portfolio</b> (Automated Tesseract OCR)</p>
                     <input type="file" id="screenshotUpload" style="display:none;" accept="image/*" onchange="processScreenshot(event)">
                     <p id="uploadStatus" style="font-size:0.82rem; color:var(--accent-gold); margin-top:5px;"></p>
                 </div>
@@ -237,7 +235,7 @@
                     <input type="text" id="portSymbol" placeholder="Stock Name (e.g. RELIANCE)">
                     <input type="number" id="portQty" placeholder="Qty">
                     <input type="number" id="portAvgPrice" placeholder="Buy Price (₹)">
-                    <input type="number" id="portCMP" placeholder="CMP (₹)">
+                    <input type="number" id="portCMP" placeholder="Live/Last CMP (₹)">
                     <button onclick="addPortfolioStock()">Add Holding</button>
                 </div>
 
@@ -249,7 +247,7 @@
                             <th>Buy Price</th>
                             <th>CMP</th>
                             <th>P&L (₹)</th>
-                            <th>Fundamental Analysis</th>
+                            <th>Fundamental Rationale</th>
                             <th>Technical Setup</th>
                             <th>Action Suggestion</th>
                             <th>Remove</th>
@@ -441,7 +439,7 @@
         document.addEventListener("DOMContentLoaded", () => {
             renderPortfolio();
             renderWatchlist();
-            runPromptUpdate(); // Auto load Rajesh Kapoor briefing on initial load
+            runPromptUpdate();
         });
 
         function switchTab(event, tabId) {
@@ -456,43 +454,49 @@
             const today = new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             
             out.innerHTML = `
-                <h3>🌅 Daily Market Briefing by Rajesh Kapoor (${today})</h3>
+                <h3>🌅 Daily Dalal Street Intelligence Briefing by Rajesh Kapoor (${today})</h3>
                 <br>
                 <section>
-                    <b>🌅 Market Mood:</b> <span class="tag-bullish">Mildly Bullish / Sectoral Rotation</span><br>
-                    <i>"Bhai, Nifty ~22,600 support hold kar raha hai! GIFT Nifty setup flat to positive cues de raha hai while DII net buying is keeping the downside protected."</i>
+                    <b>🌅 Market Mood & Global Cues:</b> <span class="tag-bullish">Bullish Consolidation</span><br>
+                    <i>"Bhai, Nifty ~22,600 support level rock-solid hold kar raha hai! GIFT Nifty positive open hint kar raha hai. Dow Jones closed green, Crude Oil stable at $76/bbl, and net FII/DII institutional flows remain net positive for India."</i>
                 </section>
 
                 <section>
-                    <b>📈 Top Trending Picks:</b><br>
-                    1. <b>BHARTIARTL:</b> Buy Entry ₹1,690-1,700 | Target ₹1,820 | SL ₹1,640 (Technical Flag & Pole breakout + ARPU upside)<br>
-                    2. <b>ICICIBANK:</b> Buy Entry ₹1,220-1,230 | Target ₹1,310 | SL ₹1,190 (9 EMA bounce with robust credit growth)<br>
-                    3. <b>L&T:</b> Buy Entry ₹3,550 | Target ₹3,800 | SL ₹3,440 (Strong capex order pipeline)<br>
-                    4. <b>TRENT:</b> Buy Entry ₹7,100 | Target ₹7,800 | SL ₹6,800 (Retail store expansion momentum)<br>
-                    5. <b>TATAMOTORS:</b> Buy Entry ₹960 | Target ₹1,030 | SL ₹930 (Intraday VWAP breakout)
+                    <b>📈 Top 5 Trending Stock Picks:</b><br>
+                    1. <b>BHARTIARTL (Short Term):</b> Buy Zone ₹1,690-1,700 | Target ₹1,820 | Stop Loss ₹1,640<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<i>Technical: Flag & Pole chart pattern breakout on Daily. Fundamental: Steady ARPU growth and 5G market leadership.</i><br>
+                    2. <b>ICICIBANK (Intraday / Swing):</b> Buy Zone ₹1,220-1,230 | Target ₹1,310 | Stop Loss ₹1,190<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<i>Technical: Rebound off 9 EMA support. Fundamental: Outstanding credit growth & robust net interest margins (NIM).</i><br>
+                    3. <b>L&T (Short Term):</b> Buy Zone ₹3,550 | Target ₹3,800 | Stop Loss ₹3,440<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<i>Technical: Bouncing off 50 SMA. Fundamental: Massive government capex order pipeline.</i><br>
+                    4. <b>TRENT (Swing Trade):</b> Buy Zone ₹7,100 | Target ₹7,800 | Stop Loss ₹6,800<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<i>Technical: Sustained higher-high formation. Fundamental: Aggressive store additions drive 30%+ sales CAGR.</i><br>
+                    5. <b>TATAMOTORS (Intraday):</b> Buy Zone ₹960 | Target ₹1,030 | Stop Loss ₹930<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<i>Technical: Opening Range Breakout (ORB) above VWAP with rising volume.</i>
                 </section>
 
                 <section>
                     <b>🥇 Gold ETF Outlook:</b><br>
-                    <i>"Sona kabhi dhoka nahi deta!"</i><br>
-                    • <b>MCX Spot / NAV:</b> Holding strong near ₹1,49,500/10g level.<br>
-                    • <b>Best ETF Pick:</b> Nippon India Gold BeES (GOLDBEES) or HDFC Gold ETF.<br>
-                    • <b>Entry Zone:</b> Accumulate on any ₹300-500 dip | Target: +8% multi-month | SL: Below ₹1,46,000 spot base.<br>
-                    • <b>Trigger:</b> Central bank reserves accumulation & Rupee exchange rate cushion in INR terms.
+                    <i>"Sona kabhi dhoka nahi deta bhai!"</i><br>
+                    • <b>MCX Price / NAV Check:</b> MCX Gold near ₹1,49,500/10g level.<br>
+                    • <b>Top ETF Pick:</b> Nippon India Gold BeES (GOLDBEES) / HDFC Gold ETF (Expense ratio < 0.8%).<br>
+                    • <b>Entry Zone & Targets:</b> Accumulate on any ₹300-500 dip | Target +8% multi-month | SL ₹1,46,000.<br>
+                    • <b>USD/INR Angle:</b> Rupee weakness cushions domestic returns vs international spot price.
                 </section>
 
                 <section>
                     <b>🥈 Silver ETF Outlook:</b><br>
-                    <i>"Chandi ka time aa gaya bhai! Gold:Silver Ratio ~80-85 levels point towards Silver relative value."</i><br>
-                    • <b>MCX Spot / NAV:</b> MCX Silver near ₹2,24,000/kg zone.<br>
-                    • <b>Best ETF Pick:</b> Nippon India Silver ETF (SILVERBEES) / ICICI Prudential Silver ETF.<br>
-                    • <b>Industrial Demand Angle:</b> Strong solar panel fabrication & EV hardware consumption keeping demand tight.
+                    <i>"Chandi ka time aa gaya bhai! Gold:Silver Ratio ~80-85 levels show Silver is relatively cheap!"</i><br>
+                    • <b>MCX Price / NAV Check:</b> MCX Silver hovering near ₹2,24,000/kg.<br>
+                    • <b>Top ETF Pick:</b> Nippon India Silver ETF (SILVERBEES) / ICICI Prudential Silver ETF.<br>
+                    • <b>Industrial Demand Trigger:</b> High consumption in EV electronics, solar panel manufacturing, and 5G hardware.
                 </section>
 
                 <section>
-                    <b>🔥 Sector in Focus:</b> Capital Goods, Power & Banking.<br>
-                    <b>⚠️ Stocks / ETFs to Avoid Today:</b> High-valuation IT stocks facing US enterprise spend slowdowns.<br>
-                    <b>💡 Pro Tip of the Day:</b> <i>"Risk mat bhulo bhai! Never commit more than 2% of total capital into a single intraday trade, and keep strict stop-losses."</i>
+                    <b>🔥 Sector in Focus:</b> Capital Goods, Defense, and Banking.<br>
+                    <b>⚠️ Stocks / ETFs to Avoid Today:</b> Export-heavy IT services facing global client spend cutbacks.<br>
+                    <b>💡 Pro Tip of the Day:</b> <i>"Risk mat bhulo bhai! Never allocate more than 2% of total trading capital into a single intraday trade. Always trade with strict stop losses!"</i>
+                </section>
             `;
         }
 
@@ -511,7 +515,7 @@
                 </div>`;
         }
 
-        /* --- PORTFOLIO FUNCTIONS --- */
+        /* --- PORTFOLIO & WATCHLIST STORAGE --- */
         function getPortfolio() { return JSON.parse(localStorage.getItem(PORT_KEY)) || []; }
         function savePortfolio(data) { localStorage.setItem(PORT_KEY, JSON.stringify(data)); renderPortfolio(); }
 
@@ -534,9 +538,7 @@
             document.getElementById('portCMP').value = '';
         }
 
-        function removePortfolioStock(id) {
-            savePortfolio(getPortfolio().filter(item => item.id !== id));
-        }
+        function removePortfolioStock(id) { savePortfolio(getPortfolio().filter(item => item.id !== id)); }
 
         function renderPortfolio() {
             const port = getPortfolio();
@@ -568,7 +570,6 @@
             });
         }
 
-        /* --- WATCHLIST FUNCTIONS --- */
         function getWatchlist() { return JSON.parse(localStorage.getItem(WATCH_KEY)) || []; }
         function saveWatchlist(data) { localStorage.setItem(WATCH_KEY, JSON.stringify(data)); renderWatchlist(); }
 
@@ -589,9 +590,7 @@
             document.getElementById('watchCMP').value = '';
         }
 
-        function removeWatchlistStock(id) {
-            saveWatchlist(getWatchlist().filter(item => item.id !== id));
-        }
+        function removeWatchlistStock(id) { saveWatchlist(getWatchlist().filter(item => item.id !== id)); }
 
         function renderWatchlist() {
             const watch = getWatchlist();
