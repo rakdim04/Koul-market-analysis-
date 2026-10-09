@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Koul Market Analysis - Daily Market & Portfolio Artifact</title>
-    <!-- OCR Engine for Screenshot Upload -->
+    <!-- Tesseract OCR Engine for Image Uploads -->
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <style>
         :root {
@@ -108,10 +108,10 @@
         <div class="brand">
             <h1>KOUL MARKET ANALYSIS</h1>
         </div>
-        <div class="live-badge"><div class="live-dot"></div> REAL-TIME STREAMING CONNECTED</div>
+        <div class="live-badge"><div class="live-dot"></div> LIVE STREAMING CONNECTED (NSE/BSE)</div>
     </header>
 
-    <!-- TradingView Live Ticker Tape -->
+    <!-- TradingView Live Ticker Tape Streamer -->
     <div class="ticker-container">
         <div class="tradingview-widget-container">
             <div class="tradingview-widget-container__widget"></div>
@@ -134,7 +134,7 @@
     <!-- Navigation Tabs -->
     <div class="nav-tabs">
         <button class="tab-btn active" onclick="switchTab(event, 'tab-overview')">Market Overview & Auto-Prompt</button>
-        <button class="tab-btn" onclick="switchTab(event, 'tab-livecmp')">Live CMP & Technicals</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab-livecmp')">Live CMP Tracker</button>
         <button class="tab-btn" onclick="switchTab(event, 'tab-portfolio')">Portfolio Analyzer</button>
         <button class="tab-btn" onclick="switchTab(event, 'tab-watchlist')">Smart Watchlist</button>
         <button class="tab-btn" onclick="switchTab(event, 'tab-intraday')">Intraday Picks</button>
@@ -142,12 +142,12 @@
         <button class="tab-btn" onclick="switchTab(event, 'tab-swing')">Swing Trade</button>
         <button class="tab-btn" onclick="switchTab(event, 'tab-longterm')">Long Term Picks</button>
         <button class="tab-btn" onclick="switchTab(event, 'tab-etf')">Gold & Silver ETF</button>
-        <button class="tab-btn" onclick="switchTab(event, 'tab-brokers')">Broker Portals & Recommendations</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab-brokers')">Broker Portals</button>
     </div>
 
     <div class="content-container">
 
-        <!-- Live Portals Bar -->
+        <!-- Live Financial Portals Bar -->
         <div class="external-links">
             <a href="https://in.tradingview.com/" target="_blank" class="ext-btn">📊 TradingView India</a>
             <a href="https://www.moneycontrol.com/" target="_blank" class="ext-btn">📰 Moneycontrol</a>
@@ -158,7 +158,6 @@
 
         <!-- 1. MARKET OVERVIEW & DETAILED BROKER BRIEFING -->
         <div id="tab-overview" class="tab-content active">
-            
             <div class="card">
                 <div class="card-header">
                     <span>🏛 Broker System Role: Rajesh Kapoor (Dalal Street Veteran)</span>
@@ -188,7 +187,7 @@
                 </div>
 
                 <div class="card">
-                    <div class="card-header">Live Indian Market News Stream</div>
+                    <div class="card-header">Live Market Impact News Stream</div>
                     <div style="height: 380px; overflow-y: auto;">
                         <div class="tradingview-widget-container">
                             <div class="tradingview-widget-container__widget"></div>
@@ -201,15 +200,15 @@
             </div>
         </div>
 
-        <!-- 2. LIVE CMP & SYMBOL TECHNICALS -->
+        <!-- 2. LIVE STREAMING CMP TRACKER -->
         <div id="tab-livecmp" class="tab-content">
             <div class="card">
                 <div class="card-header">Real-Time NSE & BSE Symbol CMP Streamer</div>
                 <div class="form-row">
-                    <input type="text" id="liveSearchSymbol" placeholder="Enter Ticker (e.g. NSE:RELIANCE, NSE:TATASTEEL, BSE:SENSEX)" style="min-width:320px;">
-                    <button onclick="loadLiveSymbolWidget()">Fetch Live CMP & Technicals</button>
+                    <input type="text" id="liveSearchSymbol" placeholder="Enter Ticker (e.g. RELIANCE, SBIN, GOLDBEES, TATAMOTORS)" style="min-width:320px;">
+                    <button onclick="loadLiveSymbolWidget()">Fetch Live Streaming CMP & Chart</button>
                 </div>
-                <div id="liveWidgetContainer" style="height: 480px; margin-top:15px;">
+                <div id="liveWidgetContainer" style="height: 500px; margin-top:15px;">
                     <div class="tradingview-widget-container" style="height:100%;">
                         <div class="tradingview-widget-container__widget" style="height:100%;"></div>
                         <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
@@ -226,7 +225,7 @@
                 <div class="card-header">Upload Screenshot or Enter Holdings</div>
                 
                 <div class="upload-box" onclick="document.getElementById('screenshotUpload').click();">
-                    <p>📸 <b>Upload Screenshot of Portfolio</b> (Automated Tesseract OCR)</p>
+                    <p>📸 <b>Upload Screenshot of Portfolio</b> (Automated OCR Engine)</p>
                     <input type="file" id="screenshotUpload" style="display:none;" accept="image/*" onchange="processScreenshot(event)">
                     <p id="uploadStatus" style="font-size:0.82rem; color:var(--accent-gold); margin-top:5px;"></p>
                 </div>
@@ -235,7 +234,7 @@
                     <input type="text" id="portSymbol" placeholder="Stock Name (e.g. RELIANCE)">
                     <input type="number" id="portQty" placeholder="Qty">
                     <input type="number" id="portAvgPrice" placeholder="Buy Price (₹)">
-                    <input type="number" id="portCMP" placeholder="Live/Last CMP (₹)">
+                    <input type="number" id="portCMP" placeholder="Live/Current CMP (₹)">
                     <button onclick="addPortfolioStock()">Add Holding</button>
                 </div>
 
@@ -287,114 +286,110 @@
             </div>
         </div>
 
-        <!-- 5. INTRADAY PICKS -->
+        <!-- 5. INTRADAY PICKS (LIVE WIDGET) -->
         <div id="tab-intraday" class="tab-content">
             <div class="card">
-                <div class="card-header">Intraday Momentum Picks</div>
-                <table class="data-table">
-                    <thead>
-                        <tr><th>Stock</th><th>Bias</th><th>Entry Zone</th><th>Target 1 / 2</th><th>Stop Loss</th><th>Rationale</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td><b>TATAMOTORS</b></td><td><span class="tag-bullish">BUY</span></td><td>Near VWAP</td><td>+1.5% / +2.5%</td><td>-0.8%</td><td>15-min ORB breakout with volume</td></tr>
-                        <tr><td><b>ICICIBANK</b></td><td><span class="tag-bullish">BUY</span></td><td>9 EMA Pullback</td><td>+1.2% / +2.0%</td><td>-0.7%</td><td>Strong banking sector momentum</td></tr>
-                        <tr><td><b>INFY</b></td><td><span class="tag-bearish">SELL</span></td><td>Below Pivot</td><td>-1.0% / -1.8%</td><td>+0.6%</td><td>Rejection at intraday resistance</td></tr>
-                        <tr><td><b>RELIANCE</b></td><td><span class="tag-bullish">BUY</span></td><td>Consolidation</td><td>+1.5% / +2.5%</td><td>-0.8%</td><td>Symmetrical triangle pattern breakout</td></tr>
-                        <tr><td><b>AXISBANK</b></td><td><span class="tag-bearish">SELL</span></td><td>Below VWAP</td><td>-1.2% / -2.0%</td><td>+0.7%</td><td>Institutional selling pressure</td></tr>
-                    </tbody>
-                </table>
+                <div class="card-header">Intraday Momentum Picks (Live Market Prices)</div>
+                <div style="height: 420px;">
+                    <div class="tradingview-widget-container">
+                        <div class="tradingview-widget-container__widget"></div>
+                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+                        {
+                            "colorTheme": "dark", "dateRange": "1D", "showChart": false, "locale": "in", "isTransparent": true, "width": "100%", "height": "420",
+                            "tabs": [
+                                { "title": "Intraday Watchlist", "symbols": [{"s": "NSE:TATAMOTORS"}, {"s": "NSE:ICICIBANK"}, {"s": "NSE:INFY"}, {"s": "NSE:RELIANCE"}, {"s": "NSE:AXISBANK"}] }
+                            ]
+                        }
+                        </script>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- 6. SHORT TERM PICKS -->
+        <!-- 6. SHORT TERM PICKS (LIVE WIDGET) -->
         <div id="tab-shortterm" class="tab-content">
             <div class="card">
                 <div class="card-header">Short Term Growth Picks (1-3 Months)</div>
-                <table class="data-table">
-                    <thead>
-                        <tr><th>Stock</th><th>Sector</th><th>Fundamental Catalyst</th><th>Technical Setup</th><th>Target</th><th>Stop Loss</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td><b>BHARTIARTL</b></td><td>Telecom</td><td>ARPU hike expectations</td><td>Flag & Pole breakout</td><td>+18%</td><td>-6%</td></tr>
-                        <tr><td><b>L&T</b></td><td>Capital Goods</td><td>Record govt capex spending</td><td>50 SMA Bounce</td><td>+15%</td><td>-5%</td></tr>
-                        <tr><td><b>TRENT</b></td><td>Retail</td><td>Zudio store expansion</td><td>Higher Highs trend</td><td>+20%</td><td>-8%</td></tr>
-                        <tr><td><b>HAL</b></td><td>Defense</td><td>Strong order backlog</td><td>Ascending triangle</td><td>+18%</td><td>-7%</td></tr>
-                        <tr><td><b>NTPC</b></td><td>Power</td><td>Green energy IPO push</td><td>Consolidation breakout</td><td>+14%</td><td>-5%</td></tr>
-                    </tbody>
-                </table>
+                <div style="height: 420px;">
+                    <div class="tradingview-widget-container">
+                        <div class="tradingview-widget-container__widget"></div>
+                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+                        {
+                            "colorTheme": "dark", "dateRange": "1M", "showChart": false, "locale": "in", "isTransparent": true, "width": "100%", "height": "420",
+                            "tabs": [
+                                { "title": "Short Term Picks", "symbols": [{"s": "NSE:BHARTIARTL"}, {"s": "NSE:LT"}, {"s": "NSE:TRENT"}, {"s": "NSE:HAL"}, {"s": "NSE:NTPC"}] }
+                            ]
+                        }
+                        </script>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- 7. SWING TRADE -->
+        <!-- 7. SWING TRADE (LIVE WIDGET) -->
         <div id="tab-swing" class="tab-content">
             <div class="card">
-                <div class="card-header">Swing Ideas (1-4 Weeks)</div>
-                <table class="data-table">
-                    <thead>
-                        <tr><th>Stock</th><th>Trigger</th><th>RSI</th><th>Target</th><th>Stop Loss</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td><b>DLF</b></td><td>Reversal from support</td><td>RSI > 40</td><td>+9%</td><td>-3.5%</td></tr>
-                        <tr><td><b>SUNPHARMA</b></td><td>20 EMA dynamic support</td><td>RSI 58</td><td>+8%</td><td>-3.0%</td></tr>
-                        <tr><td><b>TATASTEEL</b></td><td>Double Bottom breakout</td><td>RSI Bullish Crossover</td><td>+10%</td><td>-4.0%</td></tr>
-                        <tr><td><b>MARUTI</b></td><td>Cup & Handle formation</td><td>RSI 62</td><td>+8%</td><td>-3.5%</td></tr>
-                        <tr><td><b>SBIN</b></td><td>Resistance breakout</td><td>RSI 65</td><td>+9%</td><td>-3.8%</td></tr>
-                    </tbody>
-                </table>
+                <div class="card-header">Swing Trade Ideas (1-4 Weeks)</div>
+                <div style="height: 420px;">
+                    <div class="tradingview-widget-container">
+                        <div class="tradingview-widget-container__widget"></div>
+                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+                        {
+                            "colorTheme": "dark", "dateRange": "1W", "showChart": false, "locale": "in", "isTransparent": true, "width": "100%", "height": "420",
+                            "tabs": [
+                                { "title": "Swing Ideas", "symbols": [{"s": "NSE:DLF"}, {"s": "NSE:SUNPHARMA"}, {"s": "NSE:TATASTEEL"}, {"s": "NSE:MARUTI"}, {"s": "NSE:SBIN"}] }
+                            ]
+                        }
+                        </script>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- 8. LONG TERM PICKS -->
+        <!-- 8. LONG TERM PICKS (LIVE WIDGET) -->
         <div id="tab-longterm" class="tab-content">
             <div class="card">
                 <div class="card-header">Long Term Wealth Accumulation (3-5 Years)</div>
-                <table class="data-table">
-                    <thead>
-                        <tr><th>Company</th><th>Competitive Advantage</th><th>ROE</th><th>3Yr Revenue CAGR</th><th>Rating</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td><b>RELIANCE</b></td><td>Market leader in Retail & Telecom</td><td>> 12%</td><td>15%+</td><td><span class="tag-add">STRONG BUY</span></td></tr>
-                        <tr><td><b>HDFCBANK</b></td><td>Dominant private banking network</td><td>> 16%</td><td>18%+</td><td><span class="tag-add">STRONG BUY</span></td></tr>
-                        <tr><td><b>TCS</b></td><td>Debt-free IT titan with strong cash flows</td><td>> 45%</td><td>10%+</td><td><span class="tag-add">BUY</span></td></tr>
-                        <tr><td><b>TITAN</b></td><td>Organised retail market share gains</td><td>> 25%</td><td>20%+</td><td><span class="tag-add">STRONG BUY</span></td></tr>
-                        <tr><td><b>CHOLAFIN</b></td><td>Robust diversified asset quality</td><td>> 18%</td><td>22%+</td><td><span class="tag-add">BUY</span></td></tr>
-                    </tbody>
-                </table>
+                <div style="height: 420px;">
+                    <div class="tradingview-widget-container">
+                        <div class="tradingview-widget-container__widget"></div>
+                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+                        {
+                            "colorTheme": "dark", "dateRange": "12M", "showChart": false, "locale": "in", "isTransparent": true, "width": "100%", "height": "420",
+                            "tabs": [
+                                { "title": "Long Term Picks", "symbols": [{"s": "NSE:RELIANCE"}, {"s": "NSE:HDFCBANK"}, {"s": "NSE:TCS"}, {"s": "NSE:TITAN"}, {"s": "NSE:CHOLAFIN"}] }
+                            ]
+                        }
+                        </script>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- 9. GOLD & SILVER ETF -->
+        <!-- 9. GOLD & SILVER ETF (LIVE STREAMING) -->
         <div id="tab-etf" class="tab-content">
-            <div class="grid-2">
-                <div class="card">
-                    <div class="card-header">Gold ETF Analysis</div>
-                    <p style="color:var(--text-muted); font-size:0.88rem; margin-bottom:10px;">Safe haven asset hedge against global macro risks and inflation.</p>
-                    <table class="data-table">
-                        <thead><tr><th>ETF</th><th>Benchmark</th><th>Action</th></tr></thead>
-                        <tbody>
-                            <tr><td><b>GOLDBEES</b></td><td>Physical Gold</td><td><span class="tag-add">Accumulate Dips</span></td></tr>
-                            <tr><td><b>HDFCGOLD</b></td><td>Physical Gold</td><td><span class="tag-add">Accumulate Dips</span></td></tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="card">
-                    <div class="card-header">Silver ETF Analysis</div>
-                    <p style="color:var(--text-muted); font-size:0.88rem; margin-bottom:10px;">Driven by industrial consumption in Solar energy & EV hardware.</p>
-                    <table class="data-table">
-                        <thead><tr><th>ETF</th><th>Benchmark</th><th>Action</th></tr></thead>
-                        <tbody>
-                            <tr><td><b>SILVERBEES</b></td><td>Physical Silver</td><td><span class="tag-add">SIP / Buy</span></td></tr>
-                            <tr><td><b>ICICISILVER</b></td><td>Physical Silver</td><td><span class="tag-add">SIP / Buy</span></td></tr>
-                        </tbody>
-                    </table>
+            <div class="card">
+                <div class="card-header">Gold & Silver ETF Real-Time Price Watch</div>
+                <div style="height: 420px;">
+                    <div class="tradingview-widget-container">
+                        <div class="tradingview-widget-container__widget"></div>
+                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+                        {
+                            "colorTheme": "dark", "dateRange": "1D", "showChart": true, "locale": "in", "isTransparent": true, "width": "100%", "height": "420",
+                            "tabs": [
+                                { "title": "Precious Metal ETFs", "symbols": [{"s": "NSE:GOLDBEES", "d": "Nippon Gold ETF"}, {"s": "NSE:SILVERBEES", "d": "Nippon Silver ETF"}, {"s": "TVC:GOLD", "d": "World Gold Spot"}, {"s": "TVC:SILVER", "d": "World Silver Spot"}] }
+                            ]
+                        }
+                        </script>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 10. BROKER RECOMMENDATIONS & PORTALS -->
+        <!-- 10. BROKER PORTALS & RECOMMENDATIONS -->
         <div id="tab-brokers" class="tab-content">
             <div class="card">
-                <div class="card-header">Broker Recommendations & Direct Links</div>
+                <div class="card-header">Broker Recommendations & Portals</div>
                 
                 <div class="broker-card">
                     <div>
@@ -414,7 +409,7 @@
 
                 <div class="broker-card">
                     <div>
-                        <h3 style="color:var(--accent-gold);">🤖 Angel One — Recommended for Automated & Algo Trading</h3>
+                        <h3 style="color:var(--accent-gold);">🤖 Angel One — Recommended for Automated Trading</h3>
                         <p style="color:var(--text-muted); font-size:0.85rem; margin-top:4px;">Free SmartAPI REST access for Python algos.</p>
                     </div>
                     <a href="https://www.angelone.in/" target="_blank" class="ext-btn">Open Angel Portal ↗</a>
@@ -502,7 +497,7 @@
 
         function loadLiveSymbolWidget() {
             let sym = document.getElementById('liveSearchSymbol').value.toUpperCase().trim();
-            if (!sym) sym = "NSE:RELIANCE";
+            if (!sym) sym = "RELIANCE";
             if (!sym.includes(":")) sym = "NSE:" + sym;
 
             const container = document.getElementById('liveWidgetContainer');
